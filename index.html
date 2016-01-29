@@ -1,13 +1,47 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>hello phaser!</title>
-        <script src="lib/phaser.js"></script>
-        <script src="lib/socket.io.js"></script>
-        <script src="src/app.js"></script>
-    </head>
-    <body>
-        <div id="game"></div>
-    </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>hello phaser!</title>
+  <script src="lib/phaser.js"></script>
+  <script src="lib/socket.io.js"></script>
+  <script src="src/app.js"></script>
+</head>
+
+<body>
+  <div id="game"></div>
+  <script>
+    var playerId = ""
+    var timer = io.connect('http://localhost:3000/timer');
+    var game = io.connect('http://localhost:3000/game');
+    var map = io.connect('http://localhost:3000/map');
+
+    // TIMER
+    timer.on('ping', function(timeLeft) {
+      console.log("time left:" + timeLeft);
+    })
+
+    timer.on('timeover', function() {
+      console.log("timeover");
+      timer.disconnect();
+    })
+
+    // GAME
+    game.on("connect", function() {
+        console.log("game: asking for room");
+      })
+      .on("disconnect", function() {
+        console.log("game: disconnect");
+      })
+      .on("fullRoom", function() {
+        console.log("game: no room");
+      })
+      .on("userId", function(userId) {
+        playerId = userId;
+        console.log("game: you have your spot: " + playerId);
+      });
+  </script>
+</body>
+
 </html>
