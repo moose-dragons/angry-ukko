@@ -1,5 +1,4 @@
 window.onload = function() {
-
   var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
     preload: preload,
     create: create,
@@ -17,6 +16,5 @@ window.onload = function() {
   }
 
   function update() {
-
   }
 };

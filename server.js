@@ -13,6 +13,10 @@ function handler(req, res) {
     });
 }
 
+function serverLoop() {
+    console.log(new Date());
+}
+
 var app = require('http').createServer(handler)
 var io = require('socket.io')(app, {
   origins: '*:*'
@@ -38,6 +42,7 @@ var players = [];
 var gameChannel = io
   .of('/game')
   .on('connection', function(socket) {
+    var player = {};
     var userId = UUID();
     if (players.length <= 4) {
       players.push(userId);
@@ -55,9 +60,12 @@ var gameChannel = io
 
       console.log('\t socket.io:: client disconnected ' + userId);
     });
+
+    socket.on('movement', function(userId, newPos) {
+
+    });
+
+    setInterval(serverLoop, 30);
   })
-
-
-// TODO set timeInterval to spread the players positions
 
 app.listen(3000);
