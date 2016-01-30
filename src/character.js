@@ -1,8 +1,8 @@
 (function() {
   
   var directions = {
-          right:  {x: 1,  y: 0,   frame: 4},
-          left:   {x: -1, y: 0,   frame: 4},
+          right:  {x: 1,  y: 0,   frame: 0},
+          left:   {x: -1, y: 0,   frame: 0},
           up:     {x: 0,  y: -1,  frame: 5},
           down:   {x: 0,  y: 1,   frame: 7}
         };
@@ -20,8 +20,10 @@
   Phaser.ggj.isDestinationFree = function(game, destination) {
     var blockCollisions = game.physics.arcade.getObjectsAtLocation(destination.x, destination.y, blocks);
     if(blockCollisions.length === 0) {
+      console.log("Free", destination, blockCollisions);
       return true;
     } else {
+      console.log("Not Free", destination, blockCollisions);
       return false;
     }
   };
@@ -52,23 +54,27 @@
             character.body.velocity.x = 0;
             character.body.velocity.y = 0;
             delete character.ggj.destination;
-            delete character.ggj.touching;
+            
           }
         } else{
-          if(character.ggj.cursors.action.isDown && character.ggj.touching) {
+          if(character.ggj.cursors.action.isDown && character.ggj.touching ) {
             var block = character.ggj.touching;
             if (character.ggj.cursors.left.isDown) {
               if(block.destination("left"))
                 character.destination("left");
+              delete character.ggj.touching;
             } else if (character.ggj.cursors.right.isDown) {
               if(block.destination("right"))
                 character.destination("right");
+              delete character.ggj.touching;
             } else if (character.ggj.cursors.up.isDown) {
               if(block.destination("up"))
                 character.destination("up");
+              delete character.ggj.touching;
             } else if (character.ggj.cursors.down.isDown) {
               if(block.destination("down"))
                 character.destination("down");
+              delete character.ggj.touching;
             }
           } else {
             character.body.velocity.x = 0;
@@ -113,8 +119,7 @@
         destination.x = character.x + (32 * directions[direction].x);
         destination.y = character.y + (32 * directions[direction].y);
         character.ggj.destination = destination;
-          character.ggj.destinationDirection = direction;
-        
+        character.ggj.destinationDirection = direction;
       }
       
       return character;
