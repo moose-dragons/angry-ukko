@@ -6,11 +6,16 @@ window.onload = function() {
         game.load.image('bg', './assets/temp/bg.png');
         game.load.image('sbg','./assets/temp/sbg.png');
         game.load.image('dude', './assets/temp/bombtiles.jpg');
+        game.load.spritesheet("character", "assets/char_1_spritesheet_1.png", 64, 64);
+        game.load.spritesheet("projectile", "assets/img/rock.png", 64, 64);
     }
     
     var dude;
+    
+    var block;
     var cursors;
     var customBounds;
+    var blocks;
     
     function create() {
         //Backgrounds
@@ -22,16 +27,21 @@ window.onload = function() {
         //	Enable arcade physics
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        dude = game.add.sprite(500, 500, 'dude');
+        dude = Phaser.ggj.getCharacter(game, "player1", game.input.keyboard.addKeys({ 'up':   Phaser.KeyCode.UP, 'down': Phaser.KeyCode.DOWN, 'left': Phaser.KeyCode.LEFT, 'right': Phaser.KeyCode.RIGHT, 'action': Phaser.KeyCode.SPACEBAR }), 500,200);
         game.physics.arcade.enable(dude);
         //  Modify a few body properties
-        dude.body.fixedRotation = true;
+
         
         customBounds = game.add.group();
+        
         //  Create a new custom sized bounds, within the world bounds
         createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
         
         cursors = game.input.keyboard.createCursorKeys();
+        
+        blocks = game.add.group();
+        block = Phaser.ggj.getBlock(game, "block1", 400, 500);
+        blocks.add(block);
     }
     
     function createPreviewBounds(x, y, w, h) {
@@ -68,7 +78,16 @@ window.onload = function() {
 
     
     function update(){
-        dude.body.velocity.x = 0;
+        game.physics.arcade.collide(dude, customBounds);
+        game.physics.arcade.collide(blocks, customBounds);
+        game.physics.arcade.collide(dude, blocks, function(character, block) {
+          character.ggj.touching = block;
+        });
+        dude.update();
+        block.update();
+
+        
+     /*   dude.body.velocity.x = 0;
         dude.body.velocity.y = 0;
         game.physics.arcade.collide(dude, customBounds,function(a, b) {
         console.log(a, b)
@@ -86,6 +105,6 @@ window.onload = function() {
         else if (cursors.down.isDown)
         {
             dude.body.velocity.y = 500;
-        }
+        }*/
     }
 };
