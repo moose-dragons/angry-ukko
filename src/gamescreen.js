@@ -19,6 +19,8 @@ window.onload = function() {
     var customBounds;
     var blocks;
     
+    var winningRitual;
+    
     function create() {
         //Backgrounds
         var bigbg = game.add.sprite(0,0, 'bg');
@@ -117,27 +119,6 @@ window.onload = function() {
         });
         dude.update();
         block.update();
-
-        
-     /*   dude.body.velocity.x = 0;
-        dude.body.velocity.y = 0;
-        game.physics.arcade.collide(dude, customBounds,function(a, b) {
-        console.log(a, b)
-        });
-        if (cursors.left.isDown){
-            dude.body.velocity.x = -500;
-        }else if (cursors.right.isDown){
-            dude.body.velocity.x = 500;
-        }
-
-        if (cursors.up.isDown)
-        {
-            dude.body.velocity.y = -500;
-        }
-        else if (cursors.down.isDown)
-        {
-            dude.body.velocity.y = 500;
-        }*/
     }
     
     function shuffleBlocks(num, dimen, different){
@@ -154,8 +135,7 @@ window.onload = function() {
 
             block.x = x;
             block.y = y;
-            shuffled.push(block);
-            
+            shuffled.push(block);            
         }
         
         function isPlaceReserved(x, y, shuffled) {
@@ -168,5 +148,24 @@ window.onload = function() {
         }
         
         return shuffled;
+    }
+    
+    function makeRitual(tiles, types){
+        winningRitual = shuffleBlocks(tiles, 8, false);
+    }
+    
+    
+    function ritualIsComplete(){
+        var ritual = true;
+        for(var i = 0; i < winningRitual.length; i++){
+            var x = 512 + winningRitual[i].x * 32;
+            var y = 232 + winningRitual[i].y * 32;
+            var blockarray = Phaser.physics.arcade.getObjectsAtLocation(x, y, blocks);
+            if(blockarray.length < 1){
+                ritual = false;
+                break;
+            }
+        }
+        return ritual;
     }
 };
