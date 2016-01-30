@@ -10,8 +10,10 @@ window.onload = function() {
         game.load.image("projectile", "assets/img/block_neutral_2.png");
         game.load.spritesheet(
             'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
+        game.load.spritesheet("ukko", './assets/sprites/ukko_spritesheet_2.png', 213, 84, 8);
         
         game.ritualIsComplete = ritualIsComplete;
+        game.cleared = complete;
     }
     
     var dude;
@@ -27,6 +29,11 @@ window.onload = function() {
         //Backgrounds
         var bigbg = game.add.sprite(0,0, 'bg');
         var smallbg = game.add.sprite(320, 40, 'sbg');
+        
+        // Ukko
+        var ukko = game.add.sprite(1013, 40, 'ukko');
+        var perkele = ukko.animations.add('perkele');
+        ukko.animations.play('perkele', 3, true);
         
         //Hourglass
         var hglass = game.add.sprite(85, 135, 'hourglass');
@@ -173,5 +180,9 @@ window.onload = function() {
             }
         }
         return ritual;
+    }
+    
+    function complete(){
+        console.log("Ritual complete!");
     }
 };

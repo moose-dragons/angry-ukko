@@ -187,6 +187,8 @@
             block.body.velocity.x = 0;
             block.body.velocity.y = 0;
             delete block.ggj.destination;
+            var se = game.ritualIsComplete();
+            if(se)game.complete();
           }
         }
       }
