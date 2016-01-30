@@ -14,5 +14,10 @@
     "grunt-express": "^1.4.1",
     "grunt-open": "^0.2.3",
     "matchdep": "^1.0.0"
+  },
+  "dependencies": {
+    "node-uuid": "1.4.7",
+    "socket.io": "1.4.5",
+    "express": "^4.13.4"
   }
 }
