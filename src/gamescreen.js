@@ -6,7 +6,7 @@ window.onload = function() {
         game.load.image('bg', './assets/temp/bg.png');
         game.load.image('sbg','./assets/temp/sbg.png');
         game.load.image('dude', './assets/temp/bombtiles.jpg');
-        game.load.spritesheet("character", "assets/sprites/char1_spritesheet2.png", 32, 32);
+        game.load.spritesheet("character", "assets/sprites/char1_spritesheet2b.png", 32, 32);
         game.load.image("projectile", "assets/img/block_neutral_1.png");
         game.load.spritesheet(
             'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
@@ -53,10 +53,21 @@ window.onload = function() {
         cursors = game.input.keyboard.createCursorKeys();
         
         blocks = game.add.group();
+        /*
         block = Phaser.ggj.getBlock(game, "block1", 400, 500);
         blocks.add(block);
         block = Phaser.ggj.getBlock(game, "block1", 450, 550);
         blocks.add(block);
+        */
+        var places = shuffleBlocks(20, 20, false);
+        for(var i = 0; i< places.length; i++){
+            var topmargin = 40;
+            var leftmargin = 320;
+            var x = leftmargin + places[i].x*32;
+            var y = topmargin + places[i].y*32;
+            block = Phaser.ggj.getBlock(game, "block1", x, y);
+            blocks.add(block);
+        }
     }
 
     function createPreviewBounds(x, y, w, h) {
@@ -120,5 +131,37 @@ window.onload = function() {
         {
             dude.body.velocity.y = 500;
         }*/
+    }
+    
+    function shuffleBlocks(num, dimen, different){
+        var shuffled = [];
+        var rnd = function(max){
+            return Math.floor(Math.random() * (max + 1));
+        }
+        for (var i = 0; i < num; i++) {
+            var block = {};
+            do {
+                var x = rnd(dimen);
+                var y = rnd(dimen);
+                console.log('x+y' + x + '.'+ y);
+            }while (isPlaceReserved(x, y, shuffled));
+
+            block.x = x;
+            block.y = y;
+            shuffled.push(block);
+            
+        }
+        
+        function isPlaceReserved(x, y, shuffled) {
+            console.log(shuffled);
+            for (var j = 0; j < shuffled.length; j++) {
+                if (x == shuffled[j].x && y == shuffled[j].y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        return shuffled;
     }
 };
