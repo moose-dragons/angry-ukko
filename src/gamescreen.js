@@ -10,6 +10,8 @@ window.onload = function() {
         game.load.image("projectile", "assets/img/block_neutral_2.png");
         game.load.spritesheet(
             'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
+        
+        game.ritualIsComplete = ritualIsComplete;
     }
     
     var dude;
@@ -19,7 +21,7 @@ window.onload = function() {
     var customBounds;
     var blocks;
     
-    var winningRitual;
+    var winningRitual = [];
     
     function create() {
         //Backgrounds
@@ -70,15 +72,18 @@ window.onload = function() {
             places.push(b);
         }*/
         for(var i = 0; i< places.length; i++){
-            var topmargin = 40;
-            var leftmargin = 320;
+            var topmargin = 40 + 16;
+            var leftmargin = 320 + 16;
             var x = leftmargin + places[i].x*32;
             var y = topmargin + places[i].y*32;
             block = Phaser.ggj.getBlock(game, "block1", x, y);
+            block.anchor.setTo(.5, .5);
             blocks.add(block);
         }
+        
+        // Creating ritual for clearing the level
+        makeRitual();
     }
-
     function createPreviewBounds(x, y, w, h) {
         
         
@@ -89,7 +94,7 @@ window.onload = function() {
         rright.visible = false;
         customBounds.add(rright);
         
-        var ttop = game.add.sprite(x,y);
+        var ttop = game.add.sprite(x,y-1);
         game.physics.enable(ttop, Phaser.Physics.ARCADE);
         ttop.body.setSize(w,1);
         ttop.body.immovable = true;
@@ -103,7 +108,7 @@ window.onload = function() {
         bbb.visible = false;
         customBounds.add(bbb);
         
-        var lleft = game.add.sprite(x,y);
+        var lleft = game.add.sprite(x-1,y);
         game.physics.enable(lleft, Phaser.Physics.ARCADE);
         lleft.body.setSize(1,h);
         lleft.body.immovable = true;
@@ -156,11 +161,12 @@ window.onload = function() {
     
     
     function ritualIsComplete(){
-        var ritual = true;
+        var ritual = false;
         for(var i = 0; i < winningRitual.length; i++){
+            ritual = true;
             var x = 512 + winningRitual[i].x * 32;
             var y = 232 + winningRitual[i].y * 32;
-            var blockarray = Phaser.physics.arcade.getObjectsAtLocation(x, y, blocks);
+            var blockarray = game.physics.arcade.getObjectsAtLocation(x, y, blocks);
             if(blockarray.length < 1){
                 ritual = false;
                 break;
