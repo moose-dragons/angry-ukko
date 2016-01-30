@@ -1,9 +1,10 @@
 (function() {
+  
   var directions = {
-          right:  {x: 1, y: 0, frame: 0},
-          left:   {x: -1, y: 0, frame: 0},
-          up:     {x: 0, y: -1, frame: 5},
-          down:   {x: 0, y: 1, frame: 7}
+          right:  {x: 1,  y: 0,   frame: 0},
+          left:   {x: -1, y: 0,   frame: 0},
+          up:     {x: 0,  y: -1,  frame: 5},
+          down:   {x: 0,  y: 1,   frame: 7}
         };
   var speed = 150;
   var blocks;
@@ -28,11 +29,10 @@
       var character = game.add.sprite(x, y, "character");
       character.anchor.setTo(.5,.5);
 
-      character.animations.add("walk", [0,1, 2, 3, 4], 30, true);
-      character.animations.add("walkup", [5,6], 30, true);
-      character.animations.add("walkdown", [7,8], 30, true);
+      character.animations.add("walk", [0,1,2,3], 10, true);
+      character.animations.add("walkup", [5,6],   10, true);
+      character.animations.add("walkdown", [7,8], 10, true);
 
-      
       character.ggj = {};
       character.ggj.flipped = false;
       character.ggj.cursors = cursors;
@@ -110,8 +110,8 @@
       character.destination = function(direction) {
         var dir = directions[direction];
         var destination = {};
-        destination.x = character.x + (64 * directions[direction].x);
-        destination.y = character.y + (64 * directions[direction].y);
+        destination.x = character.x + (32 * directions[direction].x);
+        destination.y = character.y + (32 * directions[direction].y);
         character.ggj.destination = destination;
         
         if(Phaser.ggj.isDestinationFree(game, destination)) {
@@ -172,8 +172,8 @@
       block.destination = function(direction) {
         var dir = directions[direction];
         var destination = {};
-        destination.x = block.x + (64 * directions[direction].x);
-        destination.y = block.y + (64 * directions[direction].y);
+        destination.x = block.x + (32 * directions[direction].x);
+        destination.y = block.y + (32 * directions[direction].y);
         if(Phaser.ggj.isDestinationFree(game, destination)) {
           console.log("Destination free");
           block.ggj.destination = destination;
