@@ -175,11 +175,9 @@
         destination.x = block.x + (32 * directions[direction].x);
         destination.y = block.y + (32 * directions[direction].y);
         if(Phaser.ggj.isDestinationFree(game, destination)) {
-          console.log("Destination free");
           block.ggj.destination = destination;
           return true;
         } else {
-          console.log("Destination not free");
           return false;  
         }
         
