@@ -15,9 +15,9 @@
 	Phaser.ggj.getCharacter = function(game, name, cursors, x, y) {
       var character = game.add.sprite(x, y, "character");
       character.anchor.setTo(.5,.5);
-      character.animations.add("walk", [0,1], 30, true);
-      character.animations.add("walkup", [3,4], 30, true);
-      character.animations.add("walkdown", [5,6], 30, true);
+      character.animations.add("walk", [0,1], 5, true);
+      character.animations.add("walkup", [3,4], 5, true);
+      character.animations.add("walkdown", [5,6], 5, true);
       
       character.ggj = {};
       character.ggj.flipped = false;

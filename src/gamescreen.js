@@ -7,7 +7,9 @@ window.onload = function() {
         game.load.image('sbg','./assets/temp/sbg.png');
         game.load.image('dude', './assets/temp/bombtiles.jpg');
         game.load.spritesheet("character", "assets/char_1_spritesheet_1.png", 64, 64);
-        game.load.spritesheet("projectile", "assets/img/rock.png", 64, 64);
+        game.load.image("projectile", "assets/img/block_neutral_1.png");
+        game.load.spritesheet(
+            'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
     }
     
     var dude;
@@ -22,12 +24,23 @@ window.onload = function() {
         var bigbg = game.add.sprite(0,0, 'bg');
         var smallbg = game.add.sprite(320, 40, 'sbg');
         
+        //Hourglass
+        var hglass = game.add.sprite(85, 135, 'hourglass');
+        var timeout = hglass.animations.add('timeout');
+        hglass.animations.play('timeout', 0.1, false);
+        
         //  The bounds of our physics simulation
         var bounds = new Phaser.Rectangle(320, 40, 640, 640);
         //	Enable arcade physics
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        dude = Phaser.ggj.getCharacter(game, "player1", game.input.keyboard.addKeys({ 'up':   Phaser.KeyCode.UP, 'down': Phaser.KeyCode.DOWN, 'left': Phaser.KeyCode.LEFT, 'right': Phaser.KeyCode.RIGHT, 'action': Phaser.KeyCode.SPACEBAR }), 500,200);
+        dude = Phaser.ggj.getCharacter(game, "player1", 
+                                       game.input.keyboard.addKeys({ 
+                                        'up':   Phaser.KeyCode.UP, 
+                                        'down': Phaser.KeyCode.DOWN, 
+                                        'left': Phaser.KeyCode.LEFT, 
+                                        'right': Phaser.KeyCode.RIGHT, 
+                                        'action': Phaser.KeyCode.SPACEBAR }), 500,200);
         game.physics.arcade.enable(dude);
         //  Modify a few body properties
 
@@ -42,8 +55,10 @@ window.onload = function() {
         blocks = game.add.group();
         block = Phaser.ggj.getBlock(game, "block1", 400, 500);
         blocks.add(block);
+        block = Phaser.ggj.getBlock(game, "block1", 450, 550);
+        blocks.add(block);
     }
-    
+
     function createPreviewBounds(x, y, w, h) {
         
         
@@ -79,7 +94,6 @@ window.onload = function() {
     
     function update(){
         game.physics.arcade.collide(dude, customBounds);
-        game.physics.arcade.collide(blocks, customBounds);
         game.physics.arcade.collide(dude, blocks, function(character, block) {
           character.ggj.touching = block;
         });
