@@ -7,7 +7,7 @@
           down:   {x: 0,  y: 1,   frame: 7}
         };
   var speed = 150;
-  var blocks;
+  var blocks, borders;
   
   Phaser.ggj = {
       setSpeed: function(newSpeed) {
@@ -18,14 +18,8 @@
       }
   };
   Phaser.ggj.isDestinationFree = function(game, destination) {
-    var blockCollisions = game.physics.arcade.getObjectsAtLocation(destination.x, destination.y, blocks);
-    if(blockCollisions.length === 0) {
-      console.log("Free", destination, blockCollisions);
-      return true;
-    } else {
-      console.log("Not Free", destination, blockCollisions);
-      return false;
-    }
+      var blockCollisions = game.physics.arcade.getObjectsAtLocation(destination.x, destination.y, blocks);
+      return (blockCollisions.length === 0);
   };
 	Phaser.ggj.getCharacter = function(game, name, cursors, x, y) {
       var character = game.add.sprite(x, y, "character");
@@ -36,6 +30,7 @@
       character.animations.add("walkdown", [7,8], 10, true);
 
       character.ggj = {};
+      character.ggj.lastLocation;
       character.ggj.flipped = false;
       character.ggj.cursors = cursors;
       character.ggj.name = name;
@@ -165,12 +160,16 @@
 
       block.ggj = {};
       
+      // top 40, vasen 320, oikea 960, pohjalla 680
       block.destination = function(direction) {
         var dir = directions[direction];
         var destination = {};
         destination.x = block.x + (31 * directions[direction].x);
         destination.y = block.y + (31 * directions[direction].y);
-        if(Phaser.ggj.isDestinationFree(game, destination)) {
+        if(Phaser.ggj.isDestinationFree(game, destination) 
+            && !block.ggj.destination
+            && destination.x > 320 && destination.x < 960
+            && destination.y > 40 && destination.y < 680) {
           block.ggj.destination = destination;
           return true;
         } else {
