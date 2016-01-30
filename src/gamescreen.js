@@ -3,7 +3,8 @@ window.onload = function() {
                                { preload: preload, create: create, update: update });
 
     function preload() {
-        game.load.image('bg', './assets/img/phaser.png');
+        game.load.image('bg', './assets/temp/bg.png');
+        game.load.image('sbg','./assets/temp/sbg.png');
         game.load.image('dude', './assets/temp/bombtiles.jpg');
     }
     
@@ -12,79 +13,79 @@ window.onload = function() {
     var customBounds;
     
     function create() {
+        //Backgrounds
+        var bigbg = game.add.sprite(0,0, 'bg');
+        var smallbg = game.add.sprite(320, 40, 'sbg');
+        
         //  The bounds of our physics simulation
         var bounds = new Phaser.Rectangle(320, 40, 640, 640);
-        //	Enable p2 physics
-        game.physics.startSystem(Phaser.Physics.P2JS);
-        
-        var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'bg');
-        logo.anchor.setTo(0.5, 0.5);
+        //	Enable arcade physics
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+
         dude = game.add.sprite(500, 500, 'dude');
-        game.physics.p2.enable(dude);
+        game.physics.arcade.enable(dude);
         //  Modify a few body properties
-        dude.body.collideWorldBounds = true;
-        dude.body.setZeroDamping();
         dude.body.fixedRotation = true;
         
+        customBounds = game.add.group();
         //  Create a new custom sized bounds, within the world bounds
-        customBounds = { left: null, right: null, top: null, bottom: null };
         createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
-        
-        //  Just to display the bounds
-        var graphics = game.add.graphics(bounds.x, bounds.y);
-        graphics.lineStyle(4, 0xffd900, 1);
-        graphics.drawRect(0, 0, bounds.width, bounds.height);
         
         cursors = game.input.keyboard.createCursorKeys();
     }
     
     function createPreviewBounds(x, y, w, h) {
-        var sim = game.physics.p2;
-
-        //  If you want to use your own collision group then set it here and un-comment the lines below
-        var mask = sim.boundsCollisionGroup.mask;
-
-        customBounds.left = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y) ], 
-                                         angle: 1.5707963267948966 });
-        customBounds.left.addShape(new p2.Plane());
-        // customBounds.left.shapes[0].collisionGroup = mask;
-
-        customBounds.right = new p2.Body({ mass: 0, position: [ sim.pxmi(x + w), sim.pxmi(y) ], 
-                                          angle: -1.5707963267948966 });
-        customBounds.right.addShape(new p2.Plane());
-        // customBounds.right.shapes[0].collisionGroup = mask;
-
-        customBounds.top = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y) ], 
-                                        angle: -3.141592653589793 });
-        customBounds.top.addShape(new p2.Plane());
-        // customBounds.top.shapes[0].collisionGroup = mask;
-
-        customBounds.bottom = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y + h) ] });
-        customBounds.bottom.addShape(new p2.Plane());
-        // customBounds.bottom.shapes[0].collisionGroup = mask;
-
-        sim.world.addBody(customBounds.left);
-        sim.world.addBody(customBounds.right);
-        sim.world.addBody(customBounds.top);
-        sim.world.addBody(customBounds.bottom);
+        
+        
+        var rright = game.add.sprite(x+w,y);
+        game.physics.enable(rright, Phaser.Physics.ARCADE);
+        rright.body.setSize(1,h);
+        rright.body.immovable = true;
+        rright.visible = false;
+        customBounds.add(rright);
+        
+        var ttop = game.add.sprite(x,y);
+        game.physics.enable(ttop, Phaser.Physics.ARCADE);
+        ttop.body.setSize(w,1);
+        ttop.body.immovable = true;
+        ttop.visible = false;
+        customBounds.add(ttop);
+        
+        var bbb = game.add.sprite(x,y+h);
+        game.physics.enable(bbb, Phaser.Physics.ARCADE);
+        bbb.body.setSize(w,1);
+        bbb.body.immovable = true;
+        bbb.visible = false;
+        customBounds.add(bbb);
+        
+        var lleft = game.add.sprite(x,y);
+        game.physics.enable(lleft, Phaser.Physics.ARCADE);
+        lleft.body.setSize(1,h);
+        lleft.body.immovable = true;
+        lleft.visible = false;
+        customBounds.add(lleft);
     }
 
     
     function update(){
-        dude.body.setZeroVelocity();
+        dude.body.velocity.x = 0;
+        dude.body.velocity.y = 0;
+        game.physics.arcade.collide(dude, customBounds,function(a, b) {
+        console.log(a, b)
+        });
         if (cursors.left.isDown){
-            dude.body.moveLeft(500);
+            dude.body.velocity.x = -500;
         }else if (cursors.right.isDown){
-            dude.body.moveRight(500);
+            dude.body.velocity.x = 500;
         }
 
         if (cursors.up.isDown)
         {
-            dude.body.moveUp(500);
+            dude.body.velocity.y = -500;
         }
         else if (cursors.down.isDown)
         {
-            dude.body.moveDown(500);
+            dude.body.velocity.y = 500;
         }
     }
 };
