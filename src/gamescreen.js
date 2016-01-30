@@ -3,11 +3,11 @@ window.onload = function() {
                                { preload: preload, create: create, update: update });
 
     function preload() {
-        game.load.image('bg', './assets/temp/bg.png');
-        game.load.image('sbg','./assets/temp/sbg.png');
+        game.load.image('bg', './assets/img/lankut_tausta_2.png');
+        game.load.image('sbg','./assets/img/whole_texture_1.png');
         game.load.image('dude', './assets/temp/bombtiles.jpg');
         game.load.spritesheet("character", "assets/sprites/char1_spritesheet2b.png", 32, 32);
-        game.load.image("projectile", "assets/img/block_neutral_1.png");
+        game.load.image("projectile", "assets/img/block_neutral_2.png");
         game.load.spritesheet(
             'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
     }
@@ -27,7 +27,7 @@ window.onload = function() {
         //Hourglass
         var hglass = game.add.sprite(85, 135, 'hourglass');
         var timeout = hglass.animations.add('timeout');
-        hglass.animations.play('timeout', 0.1, false);
+        hglass.animations.play('timeout', 11/120, false);
         
         //  The bounds of our physics simulation
         var bounds = new Phaser.Rectangle(320, 40, 640, 640);
@@ -53,13 +53,20 @@ window.onload = function() {
         cursors = game.input.keyboard.createCursorKeys();
         
         blocks = game.add.group();
+        Phaser.ggj.setAllObjects(blocks);
         /*
         block = Phaser.ggj.getBlock(game, "block1", 400, 500);
         blocks.add(block);
         block = Phaser.ggj.getBlock(game, "block1", 450, 550);
         blocks.add(block);
         */
-        var places = shuffleBlocks(20, 20, false);
+        var places = shuffleBlocks(20, 19, false);
+        /*for(var f = 0; f < 20; f++){
+            var b={};
+            b.x = f;
+            b.y = f;
+            places.push(b);
+        }*/
         for(var i = 0; i< places.length; i++){
             var topmargin = 40;
             var leftmargin = 320;
@@ -143,7 +150,6 @@ window.onload = function() {
             do {
                 var x = rnd(dimen);
                 var y = rnd(dimen);
-                console.log('x+y' + x + '.'+ y);
             }while (isPlaceReserved(x, y, shuffled));
 
             block.x = x;
@@ -153,7 +159,6 @@ window.onload = function() {
         }
         
         function isPlaceReserved(x, y, shuffled) {
-            console.log(shuffled);
             for (var j = 0; j < shuffled.length; j++) {
                 if (x == shuffled[j].x && y == shuffled[j].y) {
                     return true;

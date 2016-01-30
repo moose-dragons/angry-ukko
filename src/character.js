@@ -1,8 +1,8 @@
 (function() {
   
   var directions = {
-          right:  {x: 1,  y: 0,   frame: 0},
-          left:   {x: -1, y: 0,   frame: 0},
+          right:  {x: 1,  y: 0,   frame: 4},
+          left:   {x: -1, y: 0,   frame: 4},
           up:     {x: 0,  y: -1,  frame: 5},
           down:   {x: 0,  y: 1,   frame: 7}
         };
@@ -113,16 +113,7 @@
         destination.x = character.x + (32 * directions[direction].x);
         destination.y = character.y + (32 * directions[direction].y);
         character.ggj.destination = destination;
-        
-        if(Phaser.ggj.isDestinationFree(game, destination)) {
           character.ggj.destinationDirection = direction;
-          console.log("Destination free");
-          return true;
-        } else {
-          delete character.ggj.touching;
-          console.log("Destination not free");
-          return false;  
-        }
         
       }
       
@@ -172,8 +163,8 @@
       block.destination = function(direction) {
         var dir = directions[direction];
         var destination = {};
-        destination.x = block.x + (32 * directions[direction].x);
-        destination.y = block.y + (32 * directions[direction].y);
+        destination.x = block.x + (31 * directions[direction].x);
+        destination.y = block.y + (31 * directions[direction].y);
         if(Phaser.ggj.isDestinationFree(game, destination)) {
           block.ggj.destination = destination;
           return true;
