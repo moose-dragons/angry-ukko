@@ -1,9 +1,9 @@
 (function() {
   var directions = {
-          right:  {x: 1, y: 0},
-          left:   {x: -1, y: 0},
-          up:     {x: 0, y: -1},
-          down:   {x: 0, y: 1}
+          right:  {x: 1, y: 0, frame: 1},
+          left:   {x: -1, y: 0, frame: 1},
+          up:     {x: 0, y: -1, frame: 3},
+          down:   {x: 0, y: 1, frame: 5}
         };
   var speed = 150;
   
@@ -12,18 +12,18 @@
         speed = newSpeed;
       }
   };
-	Phaser.ggj.getCharacter = function(game, name, cursors) {
-      var character = game.add.sprite(100, 100, "character");
+	Phaser.ggj.getCharacter = function(game, name, cursors, x, y) {
+      var character = game.add.sprite(x, y, "character");
       character.anchor.setTo(.5,.5);
       character.animations.add("walk", [0,1], 30, true);
       character.animations.add("walkup", [3,4], 30, true);
       character.animations.add("walkdown", [5,6], 30, true);
       
-      
       character.ggj = {};
       character.ggj.flipped = false;
       character.ggj.cursors = cursors;
       character.ggj.name = name;
+      character.ggj.destinationDirection;
       character.ggj.direction = directions["right"];
       game.physics.arcade.enable(character);
       character.body.collideWorldBounds = true;
@@ -32,7 +32,7 @@
         if(character.ggj.destination) {
           var destination = character.ggj.destination;
           if(game.physics.arcade.distanceToXY(character, destination.x, destination.y) > 4) {
-            character.frame = 2;
+            character.frame = directions[character.ggj.destinationDirection].frame;
             game.physics.arcade.moveToXY(character, destination.x, destination.y);
           } else {
             character.body.velocity.x = 0;
@@ -42,7 +42,6 @@
           }
         } else{
           if(character.ggj.cursors.action.isDown && character.ggj.touching) {
-            console.log("Touching block with action button down.");
             var block = character.ggj.touching;
             if (character.ggj.cursors.left.isDown) {
               character.destination("left");
@@ -100,6 +99,7 @@
         destination.x = character.x + (64 * directions[direction].x);
         destination.y = character.y + (64 * directions[direction].y);
         character.ggj.destination = destination;
+        character.ggj.destinationDirection = direction;
       }
       
       return character;
@@ -138,8 +138,8 @@
       };
       return creature;
     };
-    Phaser.ggj.getBlock = function(game, name) {
-      var block = game.add.sprite(64*4, 64*2, "projectile");
+    Phaser.ggj.getBlock = function(game, name, x, y) {
+      var block = game.add.sprite(x, y, "projectile");
       game.physics.arcade.enable(block);
       block.body.immovable = true;
 
