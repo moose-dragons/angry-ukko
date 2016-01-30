@@ -4,10 +4,11 @@ window.onload = function() {
 
     function preload() {
         game.load.image('bg', './assets/img/lankut_tausta_2.png');
-        game.load.image('sbg','./assets/img/whole_texture_1.png');
+        game.load.image('sbg','./assets/img/texture_3.png');
         game.load.image('dude', './assets/temp/bombtiles.jpg');
         game.load.spritesheet("character", "assets/sprites/char1_spritesheet2b.png", 32, 32);
         game.load.image("projectile", "assets/img/block_neutral_2.png");
+        game.load.image("ukkoback", "assets/img/puzzle_board_1.png");
         game.load.spritesheet(
             'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
         game.load.spritesheet("ukko", './assets/sprites/ukko_spritesheet_2.png', 213, 84, 8);
@@ -29,9 +30,9 @@ window.onload = function() {
         //Backgrounds
         var bigbg = game.add.sprite(0,0, 'bg');
         var smallbg = game.add.sprite(320, 40, 'sbg');
-        
+        var ukkobg = game.add.sprite(1013, 41, 'ukkoback');
         // Ukko
-        var ukko = game.add.sprite(1013, 40, 'ukko');
+        var ukko = game.add.sprite(1019, 40, 'ukko');
         var perkele = ukko.animations.add('perkele');
         ukko.animations.play('perkele', 3, true);
         
