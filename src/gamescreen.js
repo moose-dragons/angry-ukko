@@ -6,7 +6,7 @@ window.onload = function() {
         game.load.image('bg', './assets/temp/bg.png');
         game.load.image('sbg','./assets/temp/sbg.png');
         game.load.image('dude', './assets/temp/bombtiles.jpg');
-        game.load.spritesheet("character", "assets/char_1_spritesheet_1.png", 64, 64);
+        game.load.spritesheet("character", "assets/sprites/char1_spritesheet2.png", 32, 32);
         game.load.image("projectile", "assets/img/block_neutral_1.png");
         game.load.spritesheet(
             'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
