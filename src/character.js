@@ -1,23 +1,37 @@
 (function() {
   var directions = {
-          right:  {x: 1, y: 0, frame: 1},
-          left:   {x: -1, y: 0, frame: 1},
-          up:     {x: 0, y: -1, frame: 3},
-          down:   {x: 0, y: 1, frame: 5}
+          right:  {x: 1, y: 0, frame: 0},
+          left:   {x: -1, y: 0, frame: 0},
+          up:     {x: 0, y: -1, frame: 5},
+          down:   {x: 0, y: 1, frame: 7}
         };
   var speed = 150;
+  var blocks;
   
   Phaser.ggj = {
       setSpeed: function(newSpeed) {
         speed = newSpeed;
+      },
+      setAllObjects: function(newBlocks) {
+        blocks = newBlocks;
       }
+  };
+  Phaser.ggj.isDestinationFree = function(game, destination) {
+    var blockCollisions = game.physics.arcade.getObjectsAtLocation(destination.x, destination.y, blocks);
+    if(blockCollisions.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
   };
 	Phaser.ggj.getCharacter = function(game, name, cursors, x, y) {
       var character = game.add.sprite(x, y, "character");
       character.anchor.setTo(.5,.5);
-      character.animations.add("walk", [0,1], 5, true);
-      character.animations.add("walkup", [3,4], 5, true);
-      character.animations.add("walkdown", [5,6], 5, true);
+
+      character.animations.add("walk", [0,1, 2, 3, 4], 30, true);
+      character.animations.add("walkup", [5,6], 30, true);
+      character.animations.add("walkdown", [7,8], 30, true);
+
       
       character.ggj = {};
       character.ggj.flipped = false;
@@ -44,17 +58,17 @@
           if(character.ggj.cursors.action.isDown && character.ggj.touching) {
             var block = character.ggj.touching;
             if (character.ggj.cursors.left.isDown) {
-              character.destination("left");
-              block.destination("left");
+              if(block.destination("left"))
+                character.destination("left");
             } else if (character.ggj.cursors.right.isDown) {
-              character.destination("right");
-              block.destination("right");
+              if(block.destination("right"))
+                character.destination("right");
             } else if (character.ggj.cursors.up.isDown) {
-              character.destination("up");
-              block.destination("up");
+              if(block.destination("up"))
+                character.destination("up");
             } else if (character.ggj.cursors.down.isDown) {
-              character.destination("down");
-              block.destination("down");
+              if(block.destination("down"))
+                character.destination("down");
             }
           } else {
             character.body.velocity.x = 0;
@@ -99,7 +113,17 @@
         destination.x = character.x + (64 * directions[direction].x);
         destination.y = character.y + (64 * directions[direction].y);
         character.ggj.destination = destination;
-        character.ggj.destinationDirection = direction;
+        
+        if(Phaser.ggj.isDestinationFree(game, destination)) {
+          character.ggj.destinationDirection = direction;
+          console.log("Destination free");
+          return true;
+        } else {
+          delete character.ggj.touching;
+          console.log("Destination not free");
+          return false;  
+        }
+        
       }
       
       return character;
@@ -150,12 +174,18 @@
         var destination = {};
         destination.x = block.x + (64 * directions[direction].x);
         destination.y = block.y + (64 * directions[direction].y);
-        block.ggj.destination = destination;
+        if(Phaser.ggj.isDestinationFree(game, destination)) {
+          console.log("Destination free");
+          block.ggj.destination = destination;
+          return true;
+        } else {
+          console.log("Destination not free");
+          return false;  
+        }
+        
       }
       
       block.update = function() {
-
-
         if(block.ggj.destination) {
           var destination = block.ggj.destination;
           if(block.x !== destination.x || block.y !== destination.y) {
