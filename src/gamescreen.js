@@ -24,14 +24,37 @@
         var ukko = game.add.sprite(1019, 40, 'ukko');
         var perkele = ukko.animations.add('perkele');
 
-        //Hourglass
+        // Hourglass + Ukko Animation Control
         hglass = game.add.sprite(85, 135, 'hourglass');
         var timeout = hglass.animations.add('timeout');
         timeout.enableUpdate = true;
         timeout.onUpdate.add(function(anim, frame) {
-          if(frame.index == 6) {
+
+          if(frame.index == 3) {
             muahaha.play()
-            ukko.animations.play('perkele', 4, true);
+            ukko.animations.add('perkele', [0], true);
+            ukko.animations.play('perkele');
+          }
+
+          if(frame.index == 6) {
+            ukko.animations.add('perkele', [0,1,2], true);
+            ukko.animations.play('perkele');
+          }
+
+          if(frame.index == 7) {
+            muahaha.play()
+            ukko.animations.add('perkele', [0,1,2,3], true);
+            ukko.animations.play('perkele');
+          }
+
+          if(frame.index == 8) {
+            ukko.animations.add('perkele', [0,1,2,3,4,5], true);
+            ukko.animations.play('perkele');
+          }
+
+          if(frame.index == 9) {
+            ukko.animations.add('perkele', [2,3,4,5,6,7], true);
+            ukko.animations.play('perkele');
           }
 
           if(frame.index == 10) {
@@ -131,8 +154,6 @@
         //block.update();
     },
     preload: function() {
-        
-
         game.ritualIsComplete = ritualIsComplete;
         game.complete = complete;
     }

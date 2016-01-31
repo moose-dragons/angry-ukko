@@ -5,16 +5,16 @@ mainmenu = function() {
 
 mainmenu.prototype = {
     preload: function() {
-        game.load.image('tausta', 'assets/img/opening_menu.png');
-        game.load.image('play_1', 'assets/img/play_1.png');
-        game.load.image('menu_1', 'assets/img/menu_1.png');
+        game.load.image('tausta', './assets/img/opening_menu.png');
+        game.load.image('play_1', './assets/img/play_1.png');
+        game.load.image('menu_1', './assets/img/menu_1.png');
         game.load.image('bg', './assets/img/lankut_tausta_2.png');
         game.load.image('sbg','./assets/img/texture_3.png');
         //game.load.image('dude', './assets/temp/bombtiles.jpg');
-        game.load.spritesheet("character1", "assets/sprites/char1_spritesheet2b.png", 32, 32);
-        game.load.spritesheet("character2", "assets/sprites/char2_spritesheet2b.png", 32, 32);
-        game.load.image("projectile", "assets/img/block_green2.png");
-        game.load.image("ukkoback", "assets/img/puzzle_board_1.png");
+        game.load.spritesheet("character1", "./assets/sprites/char1_spritesheet2b.png", 32, 32);
+        game.load.spritesheet("character2", "./assets/sprites/char2_spritesheet2b.png", 32, 32);
+        game.load.image("projectile", "./assets/img/block_green2.png");
+        game.load.image("ukkoback", "./assets/img/puzzle_board_1.png");
         game.load.spritesheet(
             'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
         game.load.spritesheet("ukko", './assets/sprites/ukko_spritesheet_2.png', 213, 84, 8);
