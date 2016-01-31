@@ -6,7 +6,7 @@
           up:     {x: 0,  y: -1,  frame: 5},
           down:   {x: 0,  y: 1,   frame: 7}
         };
-  var speed = 150;
+  var speed = 250;
   var blocks, borders;
   var blockForward, blockBackward;
 
@@ -191,8 +191,8 @@
       block.update = function() {
         if(block.ggj.destination) {
           var destination = block.ggj.destination;
-          if(block.x !== destination.x || block.y !== destination.y) {
-            game.physics.arcade.moveToXY(block, destination.x, destination.y);
+          if(game.physics.arcade.distanceToXY(block, destination.x, destination.y)>2) {
+            game.physics.arcade.moveToXY(block, destination.x, destination.y, 90);
           } else {
             block.body.velocity.x = 0;
             block.body.velocity.y = 0;

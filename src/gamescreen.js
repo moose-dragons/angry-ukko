@@ -93,7 +93,7 @@
         block = Phaser.ggj.getBlock(game, "block1", 450, 550);
         blocks.add(block);
         */
-        var places = shuffleBlocks(20, 19, false);
+        var places = shuffleBlocks(35, 19, false);
         /*for(var f = 0; f < 20; f++){
             var b={};
             b.x = f;
@@ -113,7 +113,7 @@
         // Creating ritual for clearing the level
         makeRitual();
         displayRitual();
-        game.puzzleNumber++;
+        game.puzzleIndex++;
    //     var ritualDrawing = game.add.sprite(1055, 160, 'ritual1');
     },
    update: function() {
@@ -202,7 +202,7 @@
 
   function makeRitual(){
       //winningRitual = shuffleBlocks(tiles, 7, false);
-      winningRitual = UKKO.rituals[game.puzzleIndex];
+      winningRitual = UKKO.rituals[puzzleTable[game.puzzleIndex]];
   }
 
 
@@ -237,13 +237,18 @@
   function displayRitual(){
       var mx = 1050;
       var my = 154;
-     // for(var i = 0; i < winningRitual.length; i++){
-       //   var x = mx + winningRitual[i].x*32*0.609375;
-       //   var y = my + winningRitual[i].y*32*0.609375;
-          var p = game.add.sprite(mx,my, 'targetRitual');
-          p.frame = puzzleTable[game.puzzleIndex];
-         // p.scale.setTo(0.609375, 0.609375);
+   var p = game.add.sprite(mx,my, 'targetRitual');
+    p.frame = puzzleTable[game.puzzleIndex];
+         
       
+  /*    
+      
+      for(var i = 0; i < winningRitual.length; i++){
+          var x = mx + winningRitual[i].x*32*0.609375;
+          var y = my + winningRitual[i].y*32*0.609375;
+        var pt = game.add.sprite(x,y, 'projectile');
+          pt.scale.setTo(0.609375, 0.609375);
+      }*/
   }
 
   function startMusic() {
