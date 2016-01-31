@@ -15,7 +15,7 @@
 
   };
   Phaser.ggj.playfield.prototype = {
-       create: function() {
+       create: function(puzzleIndex) {
         //Backgrounds
         var bigbg = game.add.sprite(0,0, 'bg');
         var smallbg = game.add.sprite(320, 40, 'sbg');
@@ -36,11 +36,12 @@
           }
         }, this);
 
-        hglass.animations.play('timeout', 13/120, false);
+        hglass.animations.play('timeout', 5, false);
         hglass.animations.currentAnim.onComplete.add(function(e) {
           var end = game.add.sprite(640, 360, 'end');
           end.anchor.setTo(0.5,0.5);
           game.input.keyboard.onUpCallback = function() {
+              delete game.input.keyboard.onUpCallback;
               game.state.start("mainmenu");
             };
         });
@@ -104,9 +105,9 @@
         }
 
         // Creating ritual for clearing the level
-        makeRitual(1);
+        makeRitual(game.puzzleNumber++);
         displayRitual();
-        //var ritualDrawing = game.add.sprite(1055, 160, 'ritual1');
+        var ritualDrawing = game.add.sprite(1055, 160, 'ritual1');
     },
    update: function() {
         game.physics.arcade.collide(dude, customBounds);
@@ -235,6 +236,9 @@
       dude2.kill();
       var end = game.add.sprite(640, 360, 'win');
       end.anchor.setTo(0.5,0.5);
+      game.input.keyboard.onUpCallback = function() {
+        game.state.start("playfield");
+      };
   }
 
   function displayRitual(){
