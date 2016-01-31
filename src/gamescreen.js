@@ -54,12 +54,9 @@ window.onload = function() {
                                         'right': Phaser.KeyCode.RIGHT, 
                                         'action': Phaser.KeyCode.SPACEBAR }), 500,200);
         game.physics.arcade.enable(dude);
-        //  Modify a few body properties
-
-        
-        customBounds = game.add.group();
         
         //  Create a new custom sized bounds, within the world bounds
+        customBounds = game.add.group();
         createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
         
         cursors = game.input.keyboard.createCursorKeys();
@@ -90,7 +87,8 @@ window.onload = function() {
         }
         
         // Creating ritual for clearing the level
-        makeRitual();
+        makeRitual(10);
+        displayRitual();
     }
     function createPreviewBounds(x, y, w, h) {
         
@@ -164,7 +162,7 @@ window.onload = function() {
     }
     
     function makeRitual(tiles, types){
-        winningRitual = shuffleBlocks(tiles, 8, false);
+        winningRitual = shuffleBlocks(tiles, 7, false);
     }
     
     
@@ -185,5 +183,16 @@ window.onload = function() {
     
     function complete(){
         console.log("Ritual complete!");
+    }
+    
+    function displayRitual(){
+        var mx = 1048;
+        var my = 154;
+        for(var i = 0; i < winningRitual.length; i++){
+            var x = mx + winningRitual[i].x*32*0.609375;
+            var y = my + winningRitual[i].y*32*0.609375;
+            var p = game.add.sprite(x, y, 'projectile');
+            p.scale.setTo(0.609375, 0.609375);
+        }
     }
 };
