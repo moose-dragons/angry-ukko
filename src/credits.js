@@ -5,7 +5,7 @@ credits = function() {
 
 credits.prototype = {
     preload: function() {
-        game.load.image('credits', 'assets/img/credits1.png');
+        game.load.image('credits', 'assets/credits1.png');
         game.load.image('back', 'assets/img/play_1.png');
     },
     create: function() {
