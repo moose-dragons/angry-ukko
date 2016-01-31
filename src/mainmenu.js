@@ -22,7 +22,7 @@ mainmenu.prototype = {
         game.load.image('win', './assets/win_screen.png');
         game.load.image('end', './assets/img/game_over_1.png');
 
-        game.load.spritesheet("targetRitual", "assets/sprites/puzzle_spritesheet_1.png", 156, 157);
+        game.load.spritesheet("targetRitual", "assets/sprites/puzzle_spritesheet_1.png", 155, 157);
         //sounds
         game.load.audio('themesong', './assets/audio/theme_song.mp3');
         game.load.audio('finalSeconds', './assets/audio/game_over.mp3');

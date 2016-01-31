@@ -235,7 +235,7 @@
   }
 
   function displayRitual(){
-      var mx = 1050;
+      var mx = 1044;
       var my = 154;
    var p = game.add.sprite(mx,my, 'targetRitual');
     p.frame = puzzleTable[game.puzzleIndex];
