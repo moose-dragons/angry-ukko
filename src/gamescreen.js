@@ -13,9 +13,10 @@ window.onload = function() {
         game.load.spritesheet(
             'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
         game.load.spritesheet("ukko", './assets/sprites/ukko_spritesheet_2.png', 213, 84, 8);
+        game.load.image('ritual1', './assets/img/puzzle_1b.png');
         
         game.ritualIsComplete = ritualIsComplete;
-        game.cleared = complete;
+        game.complete = complete;
     }
     
     var dude, dude2;
@@ -98,6 +99,7 @@ window.onload = function() {
         // Creating ritual for clearing the level
         makeRitual(10);
         displayRitual();
+        //var ritualDrawing = game.add.sprite(1055, 160, 'ritual1');
     }
     function createPreviewBounds(x, y, w, h) {
         
