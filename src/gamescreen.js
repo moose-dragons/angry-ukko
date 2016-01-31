@@ -23,16 +23,17 @@
         // Ukko
         var ukko = game.add.sprite(1019, 40, 'ukko');
         var perkele = ukko.animations.add('perkele');
-        ukko.animations.play('perkele', 3, true);
 
         //Hourglass
         hglass = game.add.sprite(85, 135, 'hourglass');
         var timeout = hglass.animations.add('timeout');
         timeout.enableUpdate = true;
         timeout.onUpdate.add(function(anim, frame) {
-          if(frame.index == 5) {
+          if(frame.index == 6) {
             muahaha.play()
+            ukko.animations.play('perkele', 4, true);
           }
+
           if(frame.index == 10) {
             finalSeconds.play();
           }
