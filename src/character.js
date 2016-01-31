@@ -21,10 +21,10 @@
       var blockCollisions = game.physics.arcade.getObjectsAtLocation(destination.x, destination.y, blocks);
       return (blockCollisions.length === 0);
   };
-	Phaser.ggj.getCharacter = function(game, name, cursors, x, y) {
-      var character = game.add.sprite(x, y, "character");
+	Phaser.ggj.getCharacter = function(game, name, cursors, x, y, spritesheet) {
+      var character = game.add.sprite(x, y, spritesheet);
       character.anchor.setTo(.5,.5);
-
+      
       character.animations.add("walk", [0,1,2,3], 10, true);
       character.animations.add("walkup", [5,6],   10, true);
       character.animations.add("walkdown", [7,8], 10, true);
@@ -38,6 +38,7 @@
       character.ggj.direction = directions["right"];
       game.physics.arcade.enable(character);
       character.body.collideWorldBounds = true;
+      character.body.setSize(26, 26);
       
       character.update = function() {
         if(character.ggj.destination) {

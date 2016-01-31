@@ -6,7 +6,8 @@ window.onload = function() {
         game.load.image('bg', './assets/img/lankut_tausta_2.png');
         game.load.image('sbg','./assets/img/texture_3.png');
         game.load.image('dude', './assets/temp/bombtiles.jpg');
-        game.load.spritesheet("character", "assets/sprites/char1_spritesheet2b.png", 32, 32);
+        game.load.spritesheet("character1", "assets/sprites/char1_spritesheet2b.png", 32, 32);
+        game.load.spritesheet("character2", "assets/sprites/char2_spritesheet2b.png", 32, 32);
         game.load.image("projectile", "assets/img/block_neutral_2.png");
         game.load.image("ukkoback", "assets/img/puzzle_board_1.png");
         game.load.spritesheet(
@@ -17,7 +18,7 @@ window.onload = function() {
         game.cleared = complete;
     }
     
-    var dude;
+    var dude, dude2;
     
     var block;
     var cursors;
@@ -52,8 +53,16 @@ window.onload = function() {
                                         'down': Phaser.KeyCode.DOWN, 
                                         'left': Phaser.KeyCode.LEFT, 
                                         'right': Phaser.KeyCode.RIGHT, 
-                                        'action': Phaser.KeyCode.SPACEBAR }), 500,200);
-        game.physics.arcade.enable(dude);
+                                        'action': Phaser.KeyCode.SPACEBAR }), 500,200, "character1");
+        
+        dude2 = Phaser.ggj.getCharacter(game, "player2", 
+                                       game.input.keyboard.addKeys({ 
+                                        'up':   Phaser.KeyCode.W, 
+                                        'down': Phaser.KeyCode.S, 
+                                        'left': Phaser.KeyCode.A, 
+                                        'right': Phaser.KeyCode.D, 
+                                        'action': Phaser.KeyCode.E }), 500,300, "character2");
+        
         
         //  Create a new custom sized bounds, within the world bounds
         customBounds = game.add.group();
@@ -125,6 +134,7 @@ window.onload = function() {
     
     function update(){
         game.physics.arcade.collide(dude, customBounds);
+        game.physics.arcade.collide(dude, dude2);
         game.physics.arcade.collide(dude, blocks, function(character, block) {
           if(character.ggj.destination) {
               delete character.ggj.destination;
@@ -132,8 +142,16 @@ window.onload = function() {
              character.ggj.touching = block; 
           }  
         });
-        dude.update();
-        block.update();
+        game.physics.arcade.collide(dude2, customBounds);
+        game.physics.arcade.collide(dude2, blocks, function(character, block) {
+          if(character.ggj.destination) {
+              delete character.ggj.destination;
+          } else {
+             character.ggj.touching = block; 
+          }  
+        });
+        //dude.update();
+        //block.update();
     }
     
     function shuffleBlocks(num, dimen, different){
