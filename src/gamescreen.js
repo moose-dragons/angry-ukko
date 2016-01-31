@@ -14,7 +14,7 @@ window.onload = function() {
             'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
         game.load.spritesheet("ukko", './assets/sprites/ukko_spritesheet_2.png', 213, 84, 8);
         game.load.image('ritual1', './assets/img/puzzle_1b.png');
-        
+        game.load.image('end', './assets/img/game_over_1.png');
         game.ritualIsComplete = ritualIsComplete;
         game.complete = complete;
     }
@@ -97,7 +97,7 @@ window.onload = function() {
         }
         
         // Creating ritual for clearing the level
-        makeRitual(10);
+        makeRitual(1);
         displayRitual();
         //var ritualDrawing = game.add.sprite(1055, 160, 'ritual1');
     }
@@ -193,18 +193,21 @@ window.onload = function() {
         var ritual = false;
         for(var i = 0; i < winningRitual.length; i++){
             ritual = true;
-            var x = 512 + winningRitual[i].x * 32;
-            var y = 232 + winningRitual[i].y * 32;
+            var x = 512 + winningRitual[i].x * 32+10;
+            var y = 232 + winningRitual[i].y * 32+10;
             var blockarray = game.physics.arcade.getObjectsAtLocation(x, y, blocks);
             if(blockarray.length < 1){
                 ritual = false;
                 break;
             }
         }
+        console.log(ritual);
         return ritual;
     }
     
     function complete(){
+        var end = game.add.sprite(640, 360, 'end');
+        end.anchor.setTo(0.5,0.5);
         console.log("Ritual complete!");
     }
     
