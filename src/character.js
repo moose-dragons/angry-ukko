@@ -43,7 +43,8 @@
       character.update = function() {
         if(character.ggj.destination) {
           var destination = character.ggj.destination;
-          if(game.physics.arcade.distanceToXY(character, destination.x, destination.y) > 4) {
+          character.animations.stop();
+          if(!game.physics.arcade.distanceToXY(character, destination.x, destination.y)) {
             character.frame = directions[character.ggj.destinationDirection].frame;
             game.physics.arcade.moveToXY(character, destination.x, destination.y);
           } else {

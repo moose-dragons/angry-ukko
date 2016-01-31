@@ -136,13 +136,12 @@ window.onload = function() {
     
     function update(){
         game.physics.arcade.collide(dude, customBounds);
-        game.physics.arcade.collide(dude, dude2);
+        game.physics.arcade.collide(dude, dude2, function(character) {
+            delete character.ggj.destination;
+          });
         game.physics.arcade.collide(dude, blocks, function(character, block) {
-          if(character.ggj.destination) {
-              delete character.ggj.destination;
-          } else {
-             character.ggj.touching = block; 
-          }  
+          delete character.ggj.destination;
+          character.ggj.touching = block; 
         });
         game.physics.arcade.collide(dude2, customBounds);
         game.physics.arcade.collide(dude2, blocks, function(character, block) {
