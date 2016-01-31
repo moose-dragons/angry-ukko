@@ -5,29 +5,26 @@
         <title>Ukko Perkele!</title>
         <script src="lib/phaser.js"></script>
         <script src="src/character.js"></script>
-        <script src="lib/socket.io.js"></script>
-        
         <script src="src/mainmenu.js"></script>
         <script src="src/gamescreen.js"></script>
         <script src="src/credits.js"></script>
     </head>
-    <!--<body>
-        <div id="game"></div>
-    </body>-->
     <body style="magin: 0; padding: 0;">
       <div id="game"></div>
-      
+
       <script type="text/javascript">
         var game = new Phaser.Game(1280, 720, Phaser.CANVAS, "Ukko Perkele");
 
-
-        console.log(Phaser.ggj.playfield);
         game.state.add("mainmenu", mainmenu);
         game.state.add("playfield", Phaser.ggj.playfield);
+<<<<<<< HEAD
         game.state.add("credits", credits);
         
+=======
+
+>>>>>>> b9d10d66b4f563b0a5a7ff3063d5523201b2567c
         game.state.start("mainmenu");
-        
+
       </script>
     </body>
 </html>
