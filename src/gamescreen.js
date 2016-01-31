@@ -36,7 +36,14 @@
           }
         }, this);
 
-        hglass.animations.play('timeout', 60/120, false);
+        hglass.animations.play('timeout', 11/120, false);
+        hglass.animations.currentAnim.onComplete.add(function(e) {
+          var end = game.add.sprite(640, 360, 'end');
+          end.anchor.setTo(0.5,0.5);
+          game.input.keyboard.onUpCallback = function() {
+              game.state.start("mainmenu");
+            };
+        });
 
         //  The bounds of our physics simulation
         var bounds = new Phaser.Rectangle(320, 40, 640, 640);
@@ -104,19 +111,16 @@
    update: function() {
         game.physics.arcade.collide(dude, customBounds);
         game.physics.arcade.collide(dude, dude2, function(character) {
-            delete character.ggj.destination;
-          });
+          delete character.ggj.destination;
+        });
         game.physics.arcade.collide(dude, blocks, function(character, block) {
           delete character.ggj.destination;
           character.ggj.touching = block;
         });
         game.physics.arcade.collide(dude2, customBounds);
         game.physics.arcade.collide(dude2, blocks, function(character, block) {
-          if(character.ggj.destination) {
-              delete character.ggj.destination;
-          } else {
-             character.ggj.touching = block;
-          }
+          delete character.ggj.destination;
+          character.ggj.touching = block;
         });
         //dude.update();
         //block.update();
@@ -124,15 +128,16 @@
     preload: function() {
         game.load.image('bg', './assets/img/lankut_tausta_2.png');
         game.load.image('sbg','./assets/img/texture_3.png');
-        game.load.image('dude', './assets/temp/bombtiles.jpg');
+        //game.load.image('dude', './assets/temp/bombtiles.jpg');
         game.load.spritesheet("character1", "assets/sprites/char1_spritesheet2b.png", 32, 32);
         game.load.spritesheet("character2", "assets/sprites/char2_spritesheet2b.png", 32, 32);
-        game.load.image("projectile", "assets/img/block_neutral_2.png");
+        game.load.image("projectile", "assets/img/block_green2.png");
         game.load.image("ukkoback", "assets/img/puzzle_board_1.png");
         game.load.spritesheet(
             'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
         game.load.spritesheet("ukko", './assets/sprites/ukko_spritesheet_2.png', 213, 84, 8);
         game.load.image('ritual1', './assets/img/puzzle_1b.png');
+        game.load.image('win', './assets/win_screen.png');
         game.load.image('end', './assets/img/game_over_1.png');
 
         //sounds
@@ -140,7 +145,7 @@
         game.load.audio('finalSeconds', './assets/audio/game_over.mp3');
         game.load.audio('blockForward', './assets/audio/block_forward.mp3');
         game.load.audio('blockBackward', './assets/audio/block_backward.mp3');
-        
+
         game.ritualIsComplete = ritualIsComplete;
         game.complete = complete;
     }
@@ -175,7 +180,7 @@
       lleft.visible = false;
       customBounds.add(lleft);
   }
-
+  
   function shuffleBlocks(num, dimen, different){
       var shuffled = [];
       var rnd = function(max){
@@ -222,14 +227,14 @@
               break;
           }
       }
-      console.log(ritual);
       return ritual;
   }
 
   function complete(){
-      var end = game.add.sprite(640, 360, 'end');
+      dude.kill();
+      dude2.kill();
+      var end = game.add.sprite(640, 360, 'win');
       end.anchor.setTo(0.5,0.5);
-      console.log("Ritual complete!");
   }
 
   function displayRitual(){
