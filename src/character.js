@@ -28,7 +28,7 @@
 
       blockForward = game.add.audio('blockForward');
       blockBackward = game.add.audio('blockBackward');
-      game.sound.setDecodedCallback([ blockForward, blockBackward ], null, this);
+      game.sound.setDecodedCallback([ blockForward, blockBackward ], function(){}, this);
 
       character.animations.add("walk", [0,1,2,3], 10, true);
       character.animations.add("walkup", [5,6],   10, true);

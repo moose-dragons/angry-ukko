@@ -131,26 +131,7 @@
         //block.update();
     },
     preload: function() {
-        game.load.image('bg', './assets/img/lankut_tausta_2.png');
-        game.load.image('sbg','./assets/img/texture_3.png');
-        //game.load.image('dude', './assets/temp/bombtiles.jpg');
-        game.load.spritesheet("character1", "assets/sprites/char1_spritesheet2b.png", 32, 32);
-        game.load.spritesheet("character2", "assets/sprites/char2_spritesheet2b.png", 32, 32);
-        game.load.image("projectile", "assets/img/block_green2.png");
-        game.load.image("ukkoback", "assets/img/puzzle_board_1.png");
-        game.load.spritesheet(
-            'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
-        game.load.spritesheet("ukko", './assets/sprites/ukko_spritesheet_2.png', 213, 84, 8);
-        game.load.image('ritual1', './assets/img/puzzle_1b.png');
-        game.load.image('win', './assets/win_screen.png');
-        game.load.image('end', './assets/img/game_over_1.png');
-
-        //sounds
-        game.load.audio('themesong', './assets/audio/theme_song.mp3');
-        game.load.audio('finalSeconds', './assets/audio/game_over.mp3');
-        game.load.audio('blockForward', './assets/audio/block_forward.mp3');
-        game.load.audio('blockBackward', './assets/audio/block_backward.mp3');
-        game.load.audio('muahaha', './assets/audio/insane_muahaha.mp3');
+        
 
         game.ritualIsComplete = ritualIsComplete;
         game.complete = complete;
