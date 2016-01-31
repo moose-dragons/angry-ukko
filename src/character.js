@@ -61,8 +61,9 @@
         } else{
           if(character.ggj.cursors.action.isDown && character.ggj.touching ) {
             var block = character.ggj.touching;
-            blockBackward.volume += 0.3;
-            blockBackward.play();
+            blockForward.volume += 0.3;
+            blockForward.addMarker('move', 0.5, 3.5);
+            blockForward.play('move');
             if (character.ggj.cursors.left.isDown) {
               if(block.destination("left"))
                 character.destination("left");
