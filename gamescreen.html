@@ -10,17 +10,12 @@
         <script src="src/mainmenu.js"></script>
         <script src="src/gamescreen.js"></script>
     </head>
-    <!--<body>
-        <div id="game"></div>
-    </body>-->
     <body style="magin: 0; padding: 0;">
       <div id="game"></div>
       
       <script type="text/javascript">
         var game = new Phaser.Game(1280, 720, Phaser.CANVAS, "Ukko Perkele");
 
-
-        console.log(Phaser.ggj.playfield);
         game.state.add("mainmenu", mainmenu);
         game.state.add("playfield", Phaser.ggj.playfield);
         
