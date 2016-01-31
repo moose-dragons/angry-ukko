@@ -31,12 +31,12 @@
         timeout.enableUpdate = true;
         timeout.onUpdate.add(function(anim, frame) {
           console.log(frame);
-          if(frame.index == 9) {
+          if(frame.index == 10) {
             finalSeconds.play();
           }
         }, this);
 
-        hglass.animations.play('timeout', 11/120, false);
+        hglass.animations.play('timeout', 13/120, false);
         hglass.animations.currentAnim.onComplete.add(function(e) {
           var end = game.add.sprite(640, 360, 'end');
           end.anchor.setTo(0.5,0.5);
@@ -180,7 +180,7 @@
       lleft.visible = false;
       customBounds.add(lleft);
   }
-  
+
   function shuffleBlocks(num, dimen, different){
       var shuffled = [];
       var rnd = function(max){
