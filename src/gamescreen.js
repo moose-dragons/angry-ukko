@@ -1,34 +1,20 @@
-window.onload = function() {
-    var game = new Phaser.Game(1280, 720, Phaser.AUTO, 'game', 
-                               { preload: preload, create: create, update: update });
+(function() {
+    //var game = new Phaser.Game(1280, 720, Phaser.AUTO, 'game',  { preload: preload, create: create, update: update });
 
-    function preload() {
-        game.load.image('bg', './assets/img/lankut_tausta_2.png');
-        game.load.image('sbg','./assets/img/texture_3.png');
-        game.load.image('dude', './assets/temp/bombtiles.jpg');
-        game.load.spritesheet("character1", "assets/sprites/char1_spritesheet2b.png", 32, 32);
-        game.load.spritesheet("character2", "assets/sprites/char2_spritesheet2b.png", 32, 32);
-        game.load.image("projectile", "assets/img/block_neutral_2.png");
-        game.load.image("ukkoback", "assets/img/puzzle_board_1.png");
-        game.load.spritesheet(
-            'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
-        game.load.spritesheet("ukko", './assets/sprites/ukko_spritesheet_2.png', 213, 84, 8);
-        game.load.image('ritual1', './assets/img/puzzle_1b.png');
-        game.load.image('end', './assets/img/game_over_1.png');
-        game.ritualIsComplete = ritualIsComplete;
-        game.complete = complete;
-    }
+  var dude, dude2;
+  
+  var block;
+  var cursors;
+  var customBounds;
+  var blocks;
+  
+  var winningRitual = [];
+
+  Phaser.ggj.playfield = function() {
     
-    var dude, dude2;
-    
-    var block;
-    var cursors;
-    var customBounds;
-    var blocks;
-    
-    var winningRitual = [];
-    
-    function create() {
+  };
+  Phaser.ggj.playfield.prototype = {
+       create: function() {
         //Backgrounds
         var bigbg = game.add.sprite(0,0, 'bg');
         var smallbg = game.add.sprite(320, 40, 'sbg');
@@ -100,41 +86,8 @@ window.onload = function() {
         makeRitual(1);
         displayRitual();
         //var ritualDrawing = game.add.sprite(1055, 160, 'ritual1');
-    }
-    function createPreviewBounds(x, y, w, h) {
-        
-        
-        var rright = game.add.sprite(x+w,y);
-        game.physics.enable(rright, Phaser.Physics.ARCADE);
-        rright.body.setSize(1,h);
-        rright.body.immovable = true;
-        rright.visible = false;
-        customBounds.add(rright);
-        
-        var ttop = game.add.sprite(x,y-1);
-        game.physics.enable(ttop, Phaser.Physics.ARCADE);
-        ttop.body.setSize(w,1);
-        ttop.body.immovable = true;
-        ttop.visible = false;
-        customBounds.add(ttop);
-        
-        var bbb = game.add.sprite(x,y+h);
-        game.physics.enable(bbb, Phaser.Physics.ARCADE);
-        bbb.body.setSize(w,1);
-        bbb.body.immovable = true;
-        bbb.visible = false;
-        customBounds.add(bbb);
-        
-        var lleft = game.add.sprite(x-1,y);
-        game.physics.enable(lleft, Phaser.Physics.ARCADE);
-        lleft.body.setSize(1,h);
-        lleft.body.immovable = true;
-        lleft.visible = false;
-        customBounds.add(lleft);
-    }
-
-    
-    function update(){
+      },
+      update: function() {
         game.physics.arcade.collide(dude, customBounds);
         game.physics.arcade.collide(dude, dude2, function(character) {
             delete character.ggj.destination;
@@ -153,72 +106,125 @@ window.onload = function() {
         });
         //dude.update();
         //block.update();
+    },
+    preload: function() {
+        game.load.image('bg', './assets/img/lankut_tausta_2.png');
+        game.load.image('sbg','./assets/img/texture_3.png');
+        game.load.image('dude', './assets/temp/bombtiles.jpg');
+        game.load.spritesheet("character1", "assets/sprites/char1_spritesheet2b.png", 32, 32);
+        game.load.spritesheet("character2", "assets/sprites/char2_spritesheet2b.png", 32, 32);
+        game.load.image("projectile", "assets/img/block_neutral_2.png");
+        game.load.image("ukkoback", "assets/img/puzzle_board_1.png");
+        game.load.spritesheet(
+            'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
+        game.load.spritesheet("ukko", './assets/sprites/ukko_spritesheet_2.png', 213, 84, 8);
+        game.load.image('ritual1', './assets/img/puzzle_1b.png');
+        game.load.image('end', './assets/img/game_over_1.png');
+        game.ritualIsComplete = ritualIsComplete;
+        game.complete = complete;
     }
-    
-    function shuffleBlocks(num, dimen, different){
-        var shuffled = [];
-        var rnd = function(max){
-            return Math.floor(Math.random() * (max + 1));
-        }
-        for (var i = 0; i < num; i++) {
-            var block = {};
-            do {
-                var x = rnd(dimen);
-                var y = rnd(dimen);
-            }while (isPlaceReserved(x, y, shuffled));
+  }
+  
+  function createPreviewBounds(x, y, w, h) {
+      
+      
+      var rright = game.add.sprite(x+w,y);
+      game.physics.enable(rright, Phaser.Physics.ARCADE);
+      rright.body.setSize(1,h);
+      rright.body.immovable = true;
+      rright.visible = false;
+      customBounds.add(rright);
+      
+      var ttop = game.add.sprite(x,y-1);
+      game.physics.enable(ttop, Phaser.Physics.ARCADE);
+      ttop.body.setSize(w,1);
+      ttop.body.immovable = true;
+      ttop.visible = false;
+      customBounds.add(ttop);
+      
+      var bbb = game.add.sprite(x,y+h);
+      game.physics.enable(bbb, Phaser.Physics.ARCADE);
+      bbb.body.setSize(w,1);
+      bbb.body.immovable = true;
+      bbb.visible = false;
+      customBounds.add(bbb);
+      
+      var lleft = game.add.sprite(x-1,y);
+      game.physics.enable(lleft, Phaser.Physics.ARCADE);
+      lleft.body.setSize(1,h);
+      lleft.body.immovable = true;
+      lleft.visible = false;
+      customBounds.add(lleft);
+  }
 
-            block.x = x;
-            block.y = y;
-            shuffled.push(block);            
-        }
-        
-        function isPlaceReserved(x, y, shuffled) {
-            for (var j = 0; j < shuffled.length; j++) {
-                if (x == shuffled[j].x && y == shuffled[j].y) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-        return shuffled;
-    }
-    
-    function makeRitual(tiles, types){
-        winningRitual = shuffleBlocks(tiles, 7, false);
-    }
-    
-    
-    function ritualIsComplete(){
-        var ritual = false;
-        for(var i = 0; i < winningRitual.length; i++){
-            ritual = true;
-            var x = 512 + winningRitual[i].x * 32+10;
-            var y = 232 + winningRitual[i].y * 32+10;
-            var blockarray = game.physics.arcade.getObjectsAtLocation(x, y, blocks);
-            if(blockarray.length < 1){
-                ritual = false;
-                break;
-            }
-        }
-        console.log(ritual);
-        return ritual;
-    }
-    
-    function complete(){
-        var end = game.add.sprite(640, 360, 'end');
-        end.anchor.setTo(0.5,0.5);
-        console.log("Ritual complete!");
-    }
-    
-    function displayRitual(){
-        var mx = 1048;
-        var my = 154;
-        for(var i = 0; i < winningRitual.length; i++){
-            var x = mx + winningRitual[i].x*32*0.609375;
-            var y = my + winningRitual[i].y*32*0.609375;
-            var p = game.add.sprite(x, y, 'projectile');
-            p.scale.setTo(0.609375, 0.609375);
-        }
-    }
-};
+  
+
+  
+  function shuffleBlocks(num, dimen, different){
+      var shuffled = [];
+      var rnd = function(max){
+          return Math.floor(Math.random() * (max + 1));
+      }
+      for (var i = 0; i < num; i++) {
+          var block = {};
+          do {
+              var x = rnd(dimen);
+              var y = rnd(dimen);
+          }while (isPlaceReserved(x, y, shuffled));
+
+          block.x = x;
+          block.y = y;
+          shuffled.push(block);            
+      }
+      
+      function isPlaceReserved(x, y, shuffled) {
+          for (var j = 0; j < shuffled.length; j++) {
+              if (x == shuffled[j].x && y == shuffled[j].y) {
+                  return true;
+              }
+          }
+          return false;
+      }
+      
+      return shuffled;
+  }
+  
+  function makeRitual(tiles, types){
+      winningRitual = shuffleBlocks(tiles, 7, false);
+  }
+  
+  
+  function ritualIsComplete(){
+      var ritual = false;
+      for(var i = 0; i < winningRitual.length; i++){
+          ritual = true;
+          var x = 512 + winningRitual[i].x * 32+10;
+          var y = 232 + winningRitual[i].y * 32+10;
+          var blockarray = game.physics.arcade.getObjectsAtLocation(x, y, blocks);
+          if(blockarray.length < 1){
+              ritual = false;
+              break;
+          }
+      }
+      console.log(ritual);
+      return ritual;
+  }
+  
+  function complete(){
+      var end = game.add.sprite(640, 360, 'end');
+      end.anchor.setTo(0.5,0.5);
+      console.log("Ritual complete!");
+  }
+  
+  function displayRitual(){
+      var mx = 1048;
+      var my = 154;
+      for(var i = 0; i < winningRitual.length; i++){
+          var x = mx + winningRitual[i].x*32*0.609375;
+          var y = my + winningRitual[i].y*32*0.609375;
+          var p = game.add.sprite(x, y, 'projectile');
+          p.scale.setTo(0.609375, 0.609375);
+      }
+  }
+
+})();

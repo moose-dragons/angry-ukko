@@ -21,7 +21,9 @@ mainmenu.prototype = {
         image3.scale.setTo(0.3, 0.3);
 
         image2.inputEnabled = true;
-        image2.events.onInputDown.add(function(){alert('play!');});
+        image2.events.onInputDown.add(function(){
+          game.state.start("playfield");
+        });
         
         image3.inputEnabled = true;
         image3.events.onInputDown.add(function(){alert('credits!');});
