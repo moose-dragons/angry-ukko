@@ -30,7 +30,9 @@
         var timeout = hglass.animations.add('timeout');
         timeout.enableUpdate = true;
         timeout.onUpdate.add(function(anim, frame) {
-          console.log(frame);
+          if(frame.index == 5) {
+            muahaha.play()
+          }
           if(frame.index == 10) {
             finalSeconds.play();
           }
@@ -75,7 +77,8 @@
         // Audio loading and decoding
         themesong = game.add.audio('themesong');
         finalSeconds = game.add.audio('finalSeconds');
-        game.sound.setDecodedCallback([ themesong, finalSeconds ], startMusic, this);
+        muahaha = game.add.audio('muahaha');
+        game.sound.setDecodedCallback([ themesong, finalSeconds, muahaha ], startMusic, this);
 
         cursors = game.input.keyboard.createCursorKeys();
 
@@ -146,6 +149,7 @@
         game.load.audio('finalSeconds', './assets/audio/game_over.mp3');
         game.load.audio('blockForward', './assets/audio/block_forward.mp3');
         game.load.audio('blockBackward', './assets/audio/block_backward.mp3');
+        game.load.audio('muahaha', './assets/audio/insane_muahaha.mp3');
 
         game.ritualIsComplete = ritualIsComplete;
         game.complete = complete;
