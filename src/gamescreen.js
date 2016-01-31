@@ -126,7 +126,11 @@ window.onload = function() {
     function update(){
         game.physics.arcade.collide(dude, customBounds);
         game.physics.arcade.collide(dude, blocks, function(character, block) {
-          character.ggj.touching = block;
+          if(character.ggj.destination) {
+              delete character.ggj.destination;
+          } else {
+             character.ggj.touching = block; 
+          }  
         });
         dude.update();
         block.update();
