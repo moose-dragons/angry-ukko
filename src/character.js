@@ -174,8 +174,8 @@
       block.destination = function(direction) {
         var dir = directions[direction];
         var destination = {};
-        destination.x = block.x + (31 * directions[direction].x);
-        destination.y = block.y + (31 * directions[direction].y);
+        destination.x = block.x + (32 * directions[direction].x);
+        destination.y = block.y + (32 * directions[direction].y);
         if(Phaser.ggj.isDestinationFree(game, destination)
             && !block.ggj.destination
             && destination.x > 320 && destination.x < 960

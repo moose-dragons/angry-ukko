@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <title>Ukko Perkele!</title>
         <script src="lib/phaser.js"></script>
+        <script src="src/rituals.js"></script>
         <script src="src/character.js"></script>
         <script src="src/mainmenu.js"></script>
         <script src="src/gamescreen.js"></script>
@@ -14,7 +15,8 @@
 
       <script type="text/javascript">
         var game = new Phaser.Game(1280, 720, Phaser.CANVAS, "Ukko Perkele");
-
+        game.puzzleIndex = 0;
+        
         game.state.add("mainmenu", mainmenu);
         game.state.add("playfield", Phaser.ggj.playfield);
         game.state.add("credits", credits);

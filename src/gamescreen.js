@@ -10,6 +10,8 @@
   var hglass, themesong, finalSeconds;
 
   var winningRitual = [];
+  
+  var puzzleTable = [8,9,0,1,2,3,4,5,6,7];
 
   Phaser.ggj.playfield = function() {
 
@@ -43,8 +45,8 @@
           var end = game.add.sprite(640, 360, 'end');
           end.anchor.setTo(0.5,0.5);
           game.input.keyboard.onUpCallback = function() {
-              delete game.input.keyboard.onUpCallback;
-              game.state.start("mainmenu");
+                delete game.input.keyboard.onUpCallback;
+                game.state.start("mainmenu");
             };
         });
 
@@ -108,9 +110,10 @@
         }
 
         // Creating ritual for clearing the level
-        makeRitual(game.puzzleNumber++);
+        makeRitual();
         displayRitual();
-        var ritualDrawing = game.add.sprite(1055, 160, 'ritual1');
+        game.puzzleNumber++;
+   //     var ritualDrawing = game.add.sprite(1055, 160, 'ritual1');
     },
    update: function() {
         game.physics.arcade.collide(dude, customBounds);
@@ -135,6 +138,7 @@
         //game.load.image('dude', './assets/temp/bombtiles.jpg');
         game.load.spritesheet("character1", "assets/sprites/char1_spritesheet2b.png", 32, 32);
         game.load.spritesheet("character2", "assets/sprites/char2_spritesheet2b.png", 32, 32);
+        game.load.spritesheet("targetRitual", "assets/sprites/puzzle_spritesheet_1.png", 156, 157);
         game.load.image("projectile", "assets/img/block_green2.png");
         game.load.image("ukkoback", "assets/img/puzzle_board_1.png");
         game.load.spritesheet(
@@ -215,8 +219,9 @@
       return shuffled;
   }
 
-  function makeRitual(tiles, types){
-      winningRitual = shuffleBlocks(tiles, 7, false);
+  function makeRitual(){
+      //winningRitual = shuffleBlocks(tiles, 7, false);
+      winningRitual = UKKO.rituals[game.puzzleIndex];
   }
 
 
@@ -240,6 +245,8 @@
       dude2.kill();
       var end = game.add.sprite(640, 360, 'win');
       end.anchor.setTo(0.5,0.5);
+      hglass.animations.stop();
+      
       game.input.keyboard.onUpCallback = function() {
         delete game.input.keyboard.onUpCallback;
         game.state.start("playfield");
@@ -247,14 +254,15 @@
   }
 
   function displayRitual(){
-      var mx = 1048;
+      var mx = 1050;
       var my = 154;
-      for(var i = 0; i < winningRitual.length; i++){
-          var x = mx + winningRitual[i].x*32*0.609375;
-          var y = my + winningRitual[i].y*32*0.609375;
-          var p = game.add.sprite(x, y, 'projectile');
-          p.scale.setTo(0.609375, 0.609375);
-      }
+     // for(var i = 0; i < winningRitual.length; i++){
+       //   var x = mx + winningRitual[i].x*32*0.609375;
+       //   var y = my + winningRitual[i].y*32*0.609375;
+          var p = game.add.sprite(mx,my, 'targetRitual');
+          p.frame = puzzleTable[game.puzzleIndex];
+         // p.scale.setTo(0.609375, 0.609375);
+      
   }
 
   function startMusic() {

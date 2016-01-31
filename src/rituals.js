@@ -1,3 +1,4 @@
+var UKKO = {};
 UKKO.rituals = [
     [//1
         {x:3, y:0},{x:4, y:0},           
