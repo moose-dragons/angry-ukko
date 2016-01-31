@@ -1,5 +1,5 @@
 (function() {
-  
+
   var directions = {
           right:  {x: 1,  y: 0,   frame: 0},
           left:   {x: -1, y: 0,   frame: 0},
@@ -8,7 +8,8 @@
         };
   var speed = 150;
   var blocks, borders;
-  
+  var blockForward, blockBackward;
+
   Phaser.ggj = {
       setSpeed: function(newSpeed) {
         speed = newSpeed;
@@ -24,7 +25,11 @@
 	Phaser.ggj.getCharacter = function(game, name, cursors, x, y, spritesheet) {
       var character = game.add.sprite(x, y, spritesheet);
       character.anchor.setTo(.5,.5);
-      
+
+      blockForward = game.add.audio('blockForward');
+      blockBackward = game.add.audio('blockBackward');
+      game.sound.setDecodedCallback([ blockForward, blockBackward ], null, this);
+
       character.animations.add("walk", [0,1,2,3], 10, true);
       character.animations.add("walkup", [5,6],   10, true);
       character.animations.add("walkdown", [7,8], 10, true);
@@ -39,7 +44,7 @@
       game.physics.arcade.enable(character);
       character.body.collideWorldBounds = true;
       character.body.setSize(26, 26);
-      
+
       character.update = function() {
         if(character.ggj.destination) {
           var destination = character.ggj.destination;
@@ -51,11 +56,13 @@
             character.body.velocity.x = 0;
             character.body.velocity.y = 0;
             delete character.ggj.destination;
-            
+
           }
         } else{
           if(character.ggj.cursors.action.isDown && character.ggj.touching ) {
             var block = character.ggj.touching;
+            blockBackward.volume += 0.3;
+            blockBackward.play();
             if (character.ggj.cursors.left.isDown) {
               if(block.destination("left"))
                 character.destination("left");
@@ -118,23 +125,23 @@
         character.ggj.destination = destination;
         character.ggj.destinationDirection = direction;
       }
-      
+
       return character;
     };
   Phaser.ggj.getCreature = function(game, name) {
       var creature = game.add.sprite(250, 250, "spiky");
       creature.scale.setTo(0.1);
-      
+
       game.physics.arcade.enable(creature);
       creature.body.collideWorldBounds = true;
       creature.body.immovable = true;
-      
+
       creature.ggj = {};
       creature.ggj.movementLength = 32;
       creature.ggj.movementStartX = creature.x + creature.ggj.movementLength;
       creature.ggj.movementStartY = creature.y + creature.ggj.movementLength;
       creature.ggj.currentDirection = directions["right"];
-      
+
       creature.update = function() {
         if(game.physics.arcade.distanceToXY(creature, creature.ggj.movementStartX, creature.ggj.movementStartY) > creature.ggj.movementLength) {
           var random = Math.random();
@@ -161,25 +168,25 @@
       block.body.immovable = true;
 
       block.ggj = {};
-      
+
       // top 40, vasen 320, oikea 960, pohjalla 680
       block.destination = function(direction) {
         var dir = directions[direction];
         var destination = {};
         destination.x = block.x + (31 * directions[direction].x);
         destination.y = block.y + (31 * directions[direction].y);
-        if(Phaser.ggj.isDestinationFree(game, destination) 
+        if(Phaser.ggj.isDestinationFree(game, destination)
             && !block.ggj.destination
             && destination.x > 320 && destination.x < 960
             && destination.y > 40 && destination.y < 680) {
           block.ggj.destination = destination;
           return true;
         } else {
-          return false;  
+          return false;
         }
-        
+
       }
-      
+
       block.update = function() {
         if(block.ggj.destination) {
           var destination = block.ggj.destination;
@@ -194,15 +201,15 @@
           }
         }
       }
-      
+
       return block;
     };
     Phaser.ggj.getTrigger = function(game, name, x, y) {
       var trigger = game.add.sprite(x, y, null);
       game.physics.enable(trigger, Phaser.Physics.ARCADE);
-      
+
       trigger.body.setSize(0, 0, 64, 64);
-      
+
       return trigger;
     };
 })();

@@ -1,19 +1,25 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>hello phaser!</title>
-    <script src="lib/phaser.js"></script>
-    <script src="lib/socket.io.js"></script>
-    <script src="src/character.js"></script>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ukko Perkele!</title>
+        <script src="lib/phaser.js"></script>
+        <script src="src/character.js"></script>
+        <script src="src/mainmenu.js"></script>
+        <script src="src/gamescreen.js"></script>
+        <script src="src/credits.js"></script>
+    </head>
+    <body style="magin: 0; padding: 0;">
+      <div id="game"></div>
 
-  </head>
+      <script type="text/javascript">
+        var game = new Phaser.Game(1280, 720, Phaser.CANVAS, "Ukko Perkele");
 
-  <body>
-    <div id="game"></div>
-    <script src="src/app.js"></script>
-    <script src="src/socket/game.js"></script>
-    <script src="src/socket/timer.js"></script>
-    <script src="src/socket/level.js"></script>
-  </body>
+        game.state.add("mainmenu", mainmenu);
+        game.state.add("playfield", Phaser.ggj.playfield);
+        game.state.add("credits", credits);
+        game.state.start("mainmenu");
+
+      </script>
+    </body>
 </html>
