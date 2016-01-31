@@ -2,16 +2,17 @@
     //var game = new Phaser.Game(1280, 720, Phaser.AUTO, 'game',  { preload: preload, create: create, update: update });
 
   var dude, dude2;
-  
+
   var block;
   var cursors;
   var customBounds;
   var blocks;
-  
+  var hglass, themesong, finalSeconds;
+
   var winningRitual = [];
 
   Phaser.ggj.playfield = function() {
-    
+
   };
   Phaser.ggj.playfield.prototype = {
        create: function() {
@@ -23,40 +24,53 @@
         var ukko = game.add.sprite(1019, 40, 'ukko');
         var perkele = ukko.animations.add('perkele');
         ukko.animations.play('perkele', 3, true);
-        
+
         //Hourglass
-        var hglass = game.add.sprite(85, 135, 'hourglass');
+        hglass = game.add.sprite(85, 135, 'hourglass');
         var timeout = hglass.animations.add('timeout');
-        hglass.animations.play('timeout', 11/120, false);
-        
+        timeout.enableUpdate = true;
+        timeout.onUpdate.add(function(anim, frame) {
+          console.log(frame);
+          if(frame.index == 9) {
+            finalSeconds.play();
+          }
+        }, this);
+
+        hglass.animations.play('timeout', 60/120, false);
+
         //  The bounds of our physics simulation
         var bounds = new Phaser.Rectangle(320, 40, 640, 640);
         //	Enable arcade physics
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        dude = Phaser.ggj.getCharacter(game, "player1", 
-                                       game.input.keyboard.addKeys({ 
-                                        'up':   Phaser.KeyCode.UP, 
-                                        'down': Phaser.KeyCode.DOWN, 
-                                        'left': Phaser.KeyCode.LEFT, 
-                                        'right': Phaser.KeyCode.RIGHT, 
+        dude = Phaser.ggj.getCharacter(game, "player1",
+                                       game.input.keyboard.addKeys({
+                                        'up':   Phaser.KeyCode.UP,
+                                        'down': Phaser.KeyCode.DOWN,
+                                        'left': Phaser.KeyCode.LEFT,
+                                        'right': Phaser.KeyCode.RIGHT,
                                         'action': Phaser.KeyCode.SPACEBAR }), 500,200, "character1");
-        
-        dude2 = Phaser.ggj.getCharacter(game, "player2", 
-                                       game.input.keyboard.addKeys({ 
-                                        'up':   Phaser.KeyCode.W, 
-                                        'down': Phaser.KeyCode.S, 
-                                        'left': Phaser.KeyCode.A, 
-                                        'right': Phaser.KeyCode.D, 
+
+        dude2 = Phaser.ggj.getCharacter(game, "player2",
+                                       game.input.keyboard.addKeys({
+                                        'up':   Phaser.KeyCode.W,
+                                        'down': Phaser.KeyCode.S,
+                                        'left': Phaser.KeyCode.A,
+                                        'right': Phaser.KeyCode.D,
                                         'action': Phaser.KeyCode.E }), 500,300, "character2");
-        
-        
+
+
         //  Create a new custom sized bounds, within the world bounds
         customBounds = game.add.group();
         createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
-        
+
+        // Audio loading and decoding
+        themesong = game.add.audio('themesong');
+        finalSeconds = game.add.audio('finalSeconds');
+        game.sound.setDecodedCallback([ themesong, finalSeconds ], startMusic, this);
+
         cursors = game.input.keyboard.createCursorKeys();
-        
+
         blocks = game.add.group();
         Phaser.ggj.setAllObjects(blocks);
         /*
@@ -81,28 +95,28 @@
             block.anchor.setTo(.5, .5);
             blocks.add(block);
         }
-        
+
         // Creating ritual for clearing the level
         makeRitual(1);
         displayRitual();
         //var ritualDrawing = game.add.sprite(1055, 160, 'ritual1');
-      },
-      update: function() {
+    },
+   update: function() {
         game.physics.arcade.collide(dude, customBounds);
         game.physics.arcade.collide(dude, dude2, function(character) {
             delete character.ggj.destination;
           });
         game.physics.arcade.collide(dude, blocks, function(character, block) {
           delete character.ggj.destination;
-          character.ggj.touching = block; 
+          character.ggj.touching = block;
         });
         game.physics.arcade.collide(dude2, customBounds);
         game.physics.arcade.collide(dude2, blocks, function(character, block) {
           if(character.ggj.destination) {
               delete character.ggj.destination;
           } else {
-             character.ggj.touching = block; 
-          }  
+             character.ggj.touching = block;
+          }
         });
         //dude.update();
         //block.update();
@@ -120,35 +134,40 @@
         game.load.spritesheet("ukko", './assets/sprites/ukko_spritesheet_2.png', 213, 84, 8);
         game.load.image('ritual1', './assets/img/puzzle_1b.png');
         game.load.image('end', './assets/img/game_over_1.png');
+
+        //sounds
+        game.load.audio('themesong', './assets/audio/theme_song.mp3');
+        game.load.audio('finalSeconds', './assets/audio/game_over.mp3');
+        game.load.audio('blockForward', './assets/audio/block_forward.mp3');
+        game.load.audio('blockBackward', './assets/audio/block_backward.mp3');
+        
         game.ritualIsComplete = ritualIsComplete;
         game.complete = complete;
     }
   }
-  
+
   function createPreviewBounds(x, y, w, h) {
-      
-      
       var rright = game.add.sprite(x+w,y);
       game.physics.enable(rright, Phaser.Physics.ARCADE);
       rright.body.setSize(1,h);
       rright.body.immovable = true;
       rright.visible = false;
       customBounds.add(rright);
-      
+
       var ttop = game.add.sprite(x,y-1);
       game.physics.enable(ttop, Phaser.Physics.ARCADE);
       ttop.body.setSize(w,1);
       ttop.body.immovable = true;
       ttop.visible = false;
       customBounds.add(ttop);
-      
+
       var bbb = game.add.sprite(x,y+h);
       game.physics.enable(bbb, Phaser.Physics.ARCADE);
       bbb.body.setSize(w,1);
       bbb.body.immovable = true;
       bbb.visible = false;
       customBounds.add(bbb);
-      
+
       var lleft = game.add.sprite(x-1,y);
       game.physics.enable(lleft, Phaser.Physics.ARCADE);
       lleft.body.setSize(1,h);
@@ -157,9 +176,6 @@
       customBounds.add(lleft);
   }
 
-  
-
-  
   function shuffleBlocks(num, dimen, different){
       var shuffled = [];
       var rnd = function(max){
@@ -174,9 +190,9 @@
 
           block.x = x;
           block.y = y;
-          shuffled.push(block);            
+          shuffled.push(block);
       }
-      
+
       function isPlaceReserved(x, y, shuffled) {
           for (var j = 0; j < shuffled.length; j++) {
               if (x == shuffled[j].x && y == shuffled[j].y) {
@@ -185,15 +201,15 @@
           }
           return false;
       }
-      
+
       return shuffled;
   }
-  
+
   function makeRitual(tiles, types){
       winningRitual = shuffleBlocks(tiles, 7, false);
   }
-  
-  
+
+
   function ritualIsComplete(){
       var ritual = false;
       for(var i = 0; i < winningRitual.length; i++){
@@ -209,13 +225,13 @@
       console.log(ritual);
       return ritual;
   }
-  
+
   function complete(){
       var end = game.add.sprite(640, 360, 'end');
       end.anchor.setTo(0.5,0.5);
       console.log("Ritual complete!");
   }
-  
+
   function displayRitual(){
       var mx = 1048;
       var my = 154;
@@ -225,6 +241,11 @@
           var p = game.add.sprite(x, y, 'projectile');
           p.scale.setTo(0.609375, 0.609375);
       }
+  }
+
+  function startMusic() {
+    themesong.play();
+    themesong.volume -= 0.5;
   }
 
 })();
