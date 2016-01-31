@@ -97,19 +97,16 @@
       update: function() {
         game.physics.arcade.collide(dude, customBounds);
         game.physics.arcade.collide(dude, dude2, function(character) {
-            delete character.ggj.destination;
-          });
+          delete character.ggj.destination;
+        });
         game.physics.arcade.collide(dude, blocks, function(character, block) {
           delete character.ggj.destination;
           character.ggj.touching = block; 
         });
         game.physics.arcade.collide(dude2, customBounds);
         game.physics.arcade.collide(dude2, blocks, function(character, block) {
-          if(character.ggj.destination) {
-              delete character.ggj.destination;
-          } else {
-             character.ggj.touching = block; 
-          }  
+          delete character.ggj.destination;
+          character.ggj.touching = block; 
         });
         //dude.update();
         //block.update();
@@ -120,7 +117,7 @@
         //game.load.image('dude', './assets/temp/bombtiles.jpg');
         game.load.spritesheet("character1", "assets/sprites/char1_spritesheet2b.png", 32, 32);
         game.load.spritesheet("character2", "assets/sprites/char2_spritesheet2b.png", 32, 32);
-        game.load.image("projectile", "assets/img/block_neutral_2.png");
+        game.load.image("projectile", "assets/img/block_green2.png");
         game.load.image("ukkoback", "assets/img/puzzle_board_1.png");
         game.load.spritesheet(
             'hourglass', './assets/sprites/hourglass_spritesheet_1.png',150, 450, 11);
@@ -215,6 +212,8 @@
   }
   
   function complete(){
+      dude.kill();
+      dude2.kill();
       var end = game.add.sprite(640, 360, 'win');
       end.anchor.setTo(0.5,0.5);
   }
